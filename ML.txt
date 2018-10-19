@@ -1,0 +1,15 @@
+Estado(_id_, -pasa_a-)
+Productor(_nro_legajo_, apellido, nombre)
+Persona(_dni_, apellido, nombre, fecha_nac
+
+Poliza(_id_, prima, fecha_inicio, fecha_fin, -productor-, -tomador-, -estado-, tipo)
+Poliza_Auto(_id_, franquicia, -auto-, -grupo_riesgo-)
+Poliza_Vida(
+Poliza_Hogar(
+
+Auto(_patente_, -año-, -ciudad-, -modelo-)
+Año(_año_, factor)
+Ciudad(_cp_, factor)
+Grupo_Riesgo(_id_, -cubre-)
+Riesgos(_id_
+Cubre(_id_, -riesgo-
