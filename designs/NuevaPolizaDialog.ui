@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>nuevaPolizaDialog</class>
+ <widget class="QDialog" name="nuevaPolizaDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>367</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="productorLabel">
+       <property name="text">
+        <string>Productor</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="productorComboBox"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="conductorLabel">
+       <property name="text">
+        <string>Conductor</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="conductorComboBox"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="autoLabel">
+       <property name="text">
+        <string>Auto</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QComboBox" name="autoComboBox"/>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="grupoDeRiesgoLabel">
+       <property name="text">
+        <string>Grupo de Riesgo</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QRadioButton" name="tercerosRadioButton">
+       <property name="text">
+        <string>terceros</string>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">radioButtonGroup</string>
+       </attribute>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QRadioButton" name="tercerosPlusRadioButton">
+       <property name="text">
+        <string>terceros plus</string>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">radioButtonGroup</string>
+       </attribute>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QRadioButton" name="todoRiesgoRadioButton">
+       <property name="text">
+        <string>todo riesgo</string>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">radioButtonGroup</string>
+       </attribute>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="franquiciaLabel">
+       <property name="text">
+        <string>Franquicia</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QLineEdit" name="franquiciaLineEdit"/>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="validoDesdeLabel">
+       <property name="text">
+        <string>Valido Desde</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QDateEdit" name="validoDesdeDateEdit"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>nuevaPolizaDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>nuevaPolizaDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <buttongroups>
+  <buttongroup name="radioButtonGroup"/>
+ </buttongroups>
+</ui>
