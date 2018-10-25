@@ -1,12 +1,6 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'MainWindow.ui'
-#
-# Created by: PyQt5 UI code generator 5.11.3
-#
-# WARNING! All changes made in this file will be lost!
-
 from PyQt5 import QtCore, QtGui, QtWidgets
+from NuevaPolizaDialog import Ui_NuevaPolizaDialog
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -76,13 +70,21 @@ class Ui_MainWindow(object):
         self.actionAcerca_de.setText(_translate("MainWindow", "Acerca de..."))
         self.actionAcerca_de.setToolTip(_translate("MainWindow", "Acerca de este TP"))
 
+        # conexión
+        self.nuevaButton.clicked.connect(self.openNuevaPolizaDialog)
+
+    def openNuevaPolizaDialog(self):
+        dialog = QtWidgets.QDialog()
+        ui = Ui_NuevaPolizaDialog()
+        ui.setupUi(dialog)
+        dialog.exec_()
+
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
+    mw = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
+    ui.setupUi(mw)
+    mw.show()
     sys.exit(app.exec_())
-

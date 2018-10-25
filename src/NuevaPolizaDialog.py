@@ -1,14 +1,7 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'NuevaPolizaDialog.ui'
-#
-# Created by: PyQt5 UI code generator 5.11.3
-#
-# WARNING! All changes made in this file will be lost!
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-class Ui_nuevaPolizaDialog(object):
+
+class Ui_NuevaPolizaDialog(object):
     def setupUi(self, nuevaPolizaDialog):
         nuevaPolizaDialog.setObjectName("nuevaPolizaDialog")
         nuevaPolizaDialog.resize(400, 367)
@@ -66,7 +59,7 @@ class Ui_nuevaPolizaDialog(object):
         self.verticalLayout.addLayout(self.formLayout)
         self.buttonBox = QtWidgets.QDialogButtonBox(nuevaPolizaDialog)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
+        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel | QtWidgets.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName("buttonBox")
         self.verticalLayout.addWidget(self.buttonBox)
 
@@ -87,4 +80,3 @@ class Ui_nuevaPolizaDialog(object):
         self.todoRiesgoRadioButton.setText(_translate("nuevaPolizaDialog", "todo riesgo"))
         self.franquiciaLabel.setText(_translate("nuevaPolizaDialog", "Franquicia"))
         self.validoDesdeLabel.setText(_translate("nuevaPolizaDialog", "Valido Desde"))
-
