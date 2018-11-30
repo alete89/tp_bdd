@@ -1,4 +1,4 @@
 src/.vscode/settings.json
 src/.vscode/.ropeproject/config.py
 src/.vscode/.ropeproject/objectdb
-src/__pycache__/NuevaPolizaDialog.cpython-35.pyc
+*.pyc
