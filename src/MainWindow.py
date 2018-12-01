@@ -1,10 +1,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-import mysql.connector
+from Database import Database as db
 from NuevaPolizaDialog import Ui_NuevaPolizaDialog
 
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
+        self.db = db.getInstance()
+        self.db.startDbConnection()
+
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 600)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -55,7 +58,6 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-        self.startDbConnection()
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -79,7 +81,6 @@ class Ui_MainWindow(object):
         # conexión
         self.nuevaButton.clicked.connect(self.openNuevaPolizaDialog)
 
-        self.startDbConnection()
         self.loadAutoresIntoTable()
 
     def openNuevaPolizaDialog(self):
@@ -88,22 +89,9 @@ class Ui_MainWindow(object):
         ui.setupUi(dialog)
         dialog.exec_()
 
-    def startDbConnection(self):
-        self.db = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            passwd="password",
-            database="parcial"
-        )
-
-    def getAutores(self):
-        mycursor = self.db.cursor()
-        mycursor.execute("SELECT * FROM parcial.Editoriales;")
-        return mycursor.fetchall()
-
     def loadAutoresIntoTable(self):
         self.tablaPolizas.setRowCount(0)
-        for rowNumber, rowData in enumerate(self.getAutores()):
+        for rowNumber, rowData in enumerate(self.db.getAutores()):
             self.tablaPolizas.insertRow(rowNumber)
             for columnNumber, data in enumerate(rowData):
                 if (rowNumber == 0):
