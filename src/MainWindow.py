@@ -1,4 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+import mysql.connector
 from NuevaPolizaDialog import Ui_NuevaPolizaDialog
 
 
@@ -15,7 +16,7 @@ class Ui_MainWindow(object):
         self.labelTabla = QtWidgets.QLabel(self.centralwidget)
         self.labelTabla.setObjectName("labelTabla")
         self.columnaIzquierda.addWidget(self.labelTabla)
-        self.tablaPolizas = QtWidgets.QTableView(self.centralwidget)
+        self.tablaPolizas = QtWidgets.QTableWidget(self.centralwidget)
         self.tablaPolizas.setObjectName("tablaPolizas")
         self.columnaIzquierda.addWidget(self.tablaPolizas)
         self.horizontalLayout.addLayout(self.columnaIzquierda)
@@ -54,30 +55,61 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.startDbConnection()
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.labelTabla.setText(_translate("MainWindow", "Pólizas de Auto Vigentes:"))
+        self.labelTabla.setText(_translate(
+            "MainWindow", "Pólizas de Auto Vigentes:"))
         self.nuevaButton.setText(_translate("MainWindow", "Nueva"))
         self.editarButton.setText(_translate("MainWindow", "Editar"))
-        self.cambiarEstadoButton.setText(_translate("MainWindow", "Cambiar Estado"))
+        self.cambiarEstadoButton.setText(
+            _translate("MainWindow", "Cambiar Estado"))
         self.menuArchivo.setTitle(_translate("MainWindow", "Archivo"))
         self.menuAyuda.setTitle(_translate("MainWindow", "Ayuda"))
         self.actionSalir.setText(_translate("MainWindow", "Salir"))
-        self.actionSalir.setToolTip(_translate("MainWindow", "Abandonar el programa"))
+        self.actionSalir.setToolTip(_translate(
+            "MainWindow", "Abandonar el programa"))
         self.actionSalir.setShortcut(_translate("MainWindow", "Ctrl+Q"))
         self.actionAcerca_de.setText(_translate("MainWindow", "Acerca de..."))
-        self.actionAcerca_de.setToolTip(_translate("MainWindow", "Acerca de este TP"))
+        self.actionAcerca_de.setToolTip(
+            _translate("MainWindow", "Acerca de este TP"))
 
         # conexión
         self.nuevaButton.clicked.connect(self.openNuevaPolizaDialog)
+
+        self.startDbConnection()
+        self.loadAutoresIntoTable()
 
     def openNuevaPolizaDialog(self):
         dialog = QtWidgets.QDialog()
         ui = Ui_NuevaPolizaDialog()
         ui.setupUi(dialog)
         dialog.exec_()
+
+    def startDbConnection(self):
+        self.db = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            passwd="password",
+            database="parcial"
+        )
+
+    def getAutores(self):
+        mycursor = self.db.cursor()
+        mycursor.execute("SELECT * FROM parcial.Editoriales;")
+        return mycursor.fetchall()
+
+    def loadAutoresIntoTable(self):
+        self.tablaPolizas.setRowCount(0)
+        for rowNumber, rowData in enumerate(self.getAutores()):
+            self.tablaPolizas.insertRow(rowNumber)
+            for columnNumber, data in enumerate(rowData):
+                if (rowNumber == 0):
+                    self.tablaPolizas.insertColumn(columnNumber)
+                self.tablaPolizas.setItem(
+                    rowNumber, columnNumber, QtWidgets.QTableWidgetItem(str(data)))
 
 
 if __name__ == "__main__":
