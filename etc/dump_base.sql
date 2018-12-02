@@ -198,6 +198,7 @@ CREATE TABLE `Grupo_Riesgo` (
 
 LOCK TABLES `Grupo_Riesgo` WRITE;
 /*!40000 ALTER TABLE `Grupo_Riesgo` DISABLE KEYS */;
+INSERT INTO `Grupo_Riesgo` VALUES (1,'Terceros completo',100),(2,'Terceros completo + extras',150),(3,'Todo riesgo',300);
 /*!40000 ALTER TABLE `Grupo_Riesgo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -300,6 +301,7 @@ CREATE TABLE `Pasa_A` (
 
 LOCK TABLES `Pasa_A` WRITE;
 /*!40000 ALTER TABLE `Pasa_A` DISABLE KEYS */;
+INSERT INTO `Pasa_A` VALUES (1,2),(1,3);
 /*!40000 ALTER TABLE `Pasa_A` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -717,4 +719,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-01 21:31:07
+-- Dump completed on 2018-12-02  1:06:40
