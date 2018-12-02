@@ -31,8 +31,8 @@ class Database:
 
     def getAutores(self):
         mycursor = self.db.cursor()
-        mycursor.execute("SELECT * FROM poliza_auto INNER JOIN poliza ON id_poliza = poliza.id;")
-        return mycursor.fetchall()
+        mycursor.execute("SELECT * FROM poliza_auto INNER JOIN poliza ON poliza_id = poliza.id;")
+        return mycursor
 
     def getEstadisticasComision(self, desde = '2018-11-01', hasta = '2018-12-01'):
         mycursor = self.db.cursor()

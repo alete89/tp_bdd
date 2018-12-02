@@ -93,16 +93,14 @@ class Ui_MainWindow(object):
         self.cargarTabla(self.tablaPolizas, self.db.getEstadisticasComision())
 
     def cargarTabla(self, tabla, resultado):
-        tabla.setRowCount(0)
+        tabla.setColumnCount(len(resultado.column_names))
+        tabla.setHorizontalHeaderLabels(resultado.column_names)
+        tabla.verticalHeader().hide()
         for rowNumber, rowData in enumerate(resultado.fetchall()):
             tabla.insertRow(rowNumber)
             for columnNumber, data in enumerate(rowData):
-                if (rowNumber == 0):
-                    tabla.insertColumn(columnNumber)
                 tabla.setItem(
                     rowNumber, columnNumber, QtWidgets.QTableWidgetItem(str(data)))
-        tabla.setHorizontalHeaderLabels(resultado.column_names)
-        tabla.verticalHeader().hide()
 
 
 if __name__ == "__main__":
