@@ -90,14 +90,19 @@ class Ui_MainWindow(object):
         dialog.exec_()
 
     def loadAutoresIntoTable(self):
-        self.tablaPolizas.setRowCount(0)
-        for rowNumber, rowData in enumerate(self.db.getAutores()):
-            self.tablaPolizas.insertRow(rowNumber)
+        self.cargarTabla(self.tablaPolizas, self.db.getEstadisticasComision())
+
+    def cargarTabla(self, tabla, resultado):
+        tabla.setRowCount(0)
+        for rowNumber, rowData in enumerate(resultado.fetchall()):
+            tabla.insertRow(rowNumber)
             for columnNumber, data in enumerate(rowData):
                 if (rowNumber == 0):
-                    self.tablaPolizas.insertColumn(columnNumber)
-                self.tablaPolizas.setItem(
+                    tabla.insertColumn(columnNumber)
+                tabla.setItem(
                     rowNumber, columnNumber, QtWidgets.QTableWidgetItem(str(data)))
+        tabla.setHorizontalHeaderLabels(resultado.column_names)
+        tabla.verticalHeader().hide()
 
 
 if __name__ == "__main__":

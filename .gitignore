@@ -2,3 +2,5 @@ src/.vscode/settings.json
 src/.vscode/.ropeproject/config.py
 src/.vscode/.ropeproject/objectdb
 *.pyc
+.vscode/*
+etc/Thumbs.db
