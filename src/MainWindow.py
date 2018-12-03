@@ -89,7 +89,7 @@ class Ui_MainWindow(object):
         dialog.exec_()
 
     def loadAutoresIntoTable(self):
-        self.cargarTabla(self.tablaPolizas, self.db.getEstadisticasComision())
+        self.cargarTabla(self.tablaPolizas, self.db.getPolizasAutoList())
 
     def cargarTabla(self, tabla, resultado):
         tabla.setColumnCount(len(resultado.column_names))

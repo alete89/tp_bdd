@@ -55,6 +55,7 @@ class Ui_NuevaPolizaDialog(object):
         self.formLayout.setWidget(7, QtWidgets.QFormLayout.LabelRole, self.validoDesdeLabel)
         self.validoDesdeDateEdit = QtWidgets.QDateEdit(nuevaPolizaDialog)
         self.validoDesdeDateEdit.setObjectName("validoDesdeDateEdit")
+        self.validoDesdeDateEdit.setCalendarPopup(True)
         self.formLayout.setWidget(7, QtWidgets.QFormLayout.FieldRole, self.validoDesdeDateEdit)
         self.verticalLayout.addLayout(self.formLayout)
         self.buttonBox = QtWidgets.QDialogButtonBox(nuevaPolizaDialog)
