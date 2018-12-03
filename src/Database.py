@@ -34,8 +34,19 @@ class Database:
         mycursor.execute("SELECT * FROM poliza_auto INNER JOIN poliza ON poliza_id = poliza.id;")
         return mycursor
 
-    def getEstadisticasComision(self, desde = '2018-11-01', hasta = '2018-12-01'):
+    def getEstadisticasComision(self, desde = '2018-11-01', hasta = '2018-12-01', tipoPoliza = 'todas'):
         mycursor = self.db.cursor()
+
+        # auto hogar vida
+        condicionTipo = ""
+        if (tipoPoliza != 'todas'):
+            condicionTipo = f"""
+                AND EXISTS (
+                    SELECT null FROM Poliza_{tipoPoliza}
+                    WHERE Poliza_{tipoPoliza}.Poliza_id = poliza.id
+                )
+            """
+
         mycursor.execute(f"""
             SELECT
                 legajo, apellido, nombre,
@@ -49,18 +60,18 @@ class Database:
             LEFT JOIN
                 (SELECT Productor_legajo, COUNT(*) activos, SUM(prima) comisionActivo
                 FROM poliza
-                WHERE estado_id = 1 AND inicio < '{desde}' AND fin >= '{desde}'
+                WHERE estado_id = 1 AND inicio < '{desde}' AND fin >= '{desde}' {condicionTipo}
                 GROUP BY Productor_legajo) PolizaActiva
                 ON legajo = PolizaActiva.Productor_legajo
             LEFT JOIN
                 (SELECT Productor_legajo, COUNT(*) iniciados, SUM(prima) comisionInicio
                 FROM poliza
-                WHERE estado_id = 1 AND inicio >= '{desde}' AND inicio <= '{hasta}'
+                WHERE estado_id = 1 AND inicio >= '{desde}' AND inicio <= '{hasta}' {condicionTipo}
                 GROUP BY Productor_legajo) PolizaInicia ON legajo = PolizaInicia.Productor_legajo
             LEFT JOIN
                 (SELECT Productor_legajo, COUNT(*) vencen, SUM(prima) comisionVence
                 FROM poliza
-                WHERE estado_id = 1 AND fin >= '{desde}' AND fin <= '{hasta}'
+                WHERE estado_id = 1 AND fin >= '{desde}' AND fin <= '{hasta}' {condicionTipo}
                 GROUP BY Productor_legajo) PolizaVence ON legajo = PolizaVence.Productor_legajo
             ORDER BY vencen_comision DESC;
         """)
