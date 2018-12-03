@@ -36,7 +36,7 @@ class Database:
 
     def getEstadisticasComision(self, desde = '2018-11-01', hasta = '2018-12-01'):
         mycursor = self.db.cursor()
-        mycursor.execute("""
+        mycursor.execute(f"""
             SELECT
                 legajo, apellido, nombre,
                 COALESCE(activos, 0) activos,
@@ -49,19 +49,20 @@ class Database:
             LEFT JOIN
                 (SELECT Productor_legajo, COUNT(*) activos, SUM(prima) comisionActivo
                 FROM poliza
-                WHERE inicio < '{desde}' AND fin >= '{desde}'
+                WHERE estado_id = 1 AND inicio < '{desde}' AND fin >= '{desde}'
                 GROUP BY Productor_legajo) PolizaActiva
                 ON legajo = PolizaActiva.Productor_legajo
             LEFT JOIN
                 (SELECT Productor_legajo, COUNT(*) iniciados, SUM(prima) comisionInicio
                 FROM poliza
-                WHERE inicio >= '{desde}' AND inicio <= '{hasta}'
+                WHERE estado_id = 1 AND inicio >= '{desde}' AND inicio <= '{hasta}'
                 GROUP BY Productor_legajo) PolizaInicia ON legajo = PolizaInicia.Productor_legajo
             LEFT JOIN
                 (SELECT Productor_legajo, COUNT(*) vencen, SUM(prima) comisionVence
                 FROM poliza
-                WHERE fin >= '{desde}' AND fin <= '{hasta}'
+                WHERE estado_id = 1 AND fin >= '{desde}' AND fin <= '{hasta}'
                 GROUP BY Productor_legajo) PolizaVence ON legajo = PolizaVence.Productor_legajo
             ORDER BY vencen_comision DESC;
         """)
+        print(mycursor.statement)
         return mycursor

@@ -2,7 +2,6 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from Database import Database as db
 from NuevaPolizaDialog import Ui_NuevaPolizaDialog
 
-
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         self.db = db.getInstance()
