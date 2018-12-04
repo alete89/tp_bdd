@@ -47,6 +47,7 @@ class PolizaDialog(QtWidgets.QDialog):
         self.validoDesdeDateEdit = QtWidgets.QDateEdit(self)
         self.validoDesdeDateEdit.setDate(QtCore.QDate.currentDate())
         self.validoDesdeDateEdit.setCalendarPopup(True)
+        self.validoDesdeDateEdit.setDisplayFormat("dd-MM-yyyy")
         self.formLayout.setWidget(6, QtWidgets.QFormLayout.FieldRole, self.validoDesdeDateEdit)
         self.verticalLayout.addLayout(self.formLayout)
         self.buttonBox = QtWidgets.QDialogButtonBox(self)
