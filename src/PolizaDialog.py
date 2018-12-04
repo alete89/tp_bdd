@@ -35,6 +35,8 @@ class PolizaDialog(QtWidgets.QDialog):
         self.grupoDeRiesgoLabel.setText("Grupo de Riesgo")
         self.formLayout.setWidget(4, QtWidgets.QFormLayout.LabelRole, self.grupoDeRiesgoLabel)
         self.GrupoDeRiesgoCombo = QtWidgets.QComboBox(self)
+        for grupoRiesgo in self.db.getGruposRiesgoList().fetchall():
+            self.GrupoDeRiesgoCombo.addItem(str(grupoRiesgo[0]))
         self.formLayout.setWidget(4, QtWidgets.QFormLayout.FieldRole, self.GrupoDeRiesgoCombo)
         self.franquiciaLabel = QtWidgets.QLabel(self)
         self.franquiciaLabel.setText("Franquicia")
