@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Database import Database as db
 from NuevaPolizaDialog import Ui_NuevaPolizaDialog
+from  utils import cargarTabla
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -89,17 +90,7 @@ class Ui_MainWindow(object):
         dialog.exec_()
 
     def loadAutoresIntoTable(self):
-        self.cargarTabla(self.tablaPolizas, self.db.getPolizasAutoList())
-
-    def cargarTabla(self, tabla, resultado):
-        tabla.setColumnCount(len(resultado.column_names))
-        tabla.setHorizontalHeaderLabels(resultado.column_names)
-        tabla.verticalHeader().hide()
-        for rowNumber, rowData in enumerate(resultado.fetchall()):
-            tabla.insertRow(rowNumber)
-            for columnNumber, data in enumerate(rowData):
-                tabla.setItem(
-                    rowNumber, columnNumber, QtWidgets.QTableWidgetItem(str(data)))
+        cargarTabla(self.tablaPolizas, self.db.getPolizasAutoList())
 
 
 if __name__ == "__main__":
