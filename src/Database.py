@@ -15,6 +15,7 @@ class Database:
             raise Exception("Mal uso del Singleton")
         else:
             Database.__instance = self
+            self.startDbConnection()
 
     def startDbConnection(self):
         # Abre conexión con la base de datos
