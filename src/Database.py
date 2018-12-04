@@ -54,6 +54,12 @@ class Database:
             "SELECT XXXXXXXXXXXXXXXXXXXXXXX FROM Auto;")
         return mycursor
 
+    def getGruposRiesgoList(self):
+        mycursor = self.db.cursor()
+        mycursor.execute(
+            "SELECT descripcion FROM Grupo_Riesgo;")
+        return mycursor
+
     def getEstadisticasComision(self, desde='2018-11-01', hasta='2018-12-01', tipoPoliza='todas'):
         mycursor = self.db.cursor()
 
