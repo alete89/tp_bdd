@@ -31,10 +31,29 @@ class Database:
 
     def getPolizasAutoList(self):
         mycursor = self.db.cursor()
-        mycursor.execute("SELECT * FROM poliza_auto INNER JOIN poliza ON poliza_id = poliza.id;")
+        mycursor.execute(
+            "SELECT * FROM Poliza_Auto INNER JOIN Poliza ON poliza_id = Poliza.id;")
         return mycursor
 
-    def getEstadisticasComision(self, desde = '2018-11-01', hasta = '2018-12-01', tipoPoliza = 'todas'):
+    def getProductoresList(self):
+        mycursor = self.db.cursor()
+        mycursor.execute(
+            "SELECT apellido, nombre FROM Productor;")
+        return mycursor
+
+    def getPersonasList(self):
+        mycursor = self.db.cursor()
+        mycursor.execute(
+            "SELECT apellido, nombre FROM Persona;")
+        return mycursor
+
+    def getAutosList(self):
+        mycursor = self.db.cursor()
+        mycursor.execute(
+            "SELECT XXXXXXXXXXXXXXXXXXXXXXX FROM Auto;")
+        return mycursor
+
+    def getEstadisticasComision(self, desde='2018-11-01', hasta='2018-12-01', tipoPoliza='todas'):
         mycursor = self.db.cursor()
 
         # auto hogar vida
@@ -43,7 +62,7 @@ class Database:
             condicionTipo = f"""
                 AND EXISTS (
                     SELECT null FROM Poliza_{tipoPoliza}
-                    WHERE Poliza_{tipoPoliza}.Poliza_id = poliza.id
+                    WHERE Poliza_{tipoPoliza}.Poliza_id = Poliza.id
                 )
             """
 
@@ -60,18 +79,18 @@ class Database:
             FROM productor
             LEFT JOIN
                 (SELECT Productor_legajo, COUNT(*) activos, SUM(prima) comisionActivo
-                FROM poliza
+                FROM Poliza
                 WHERE estado_id = 1 AND inicio < '{desde}' AND fin >= '{desde}' {condicionTipo}
                 GROUP BY Productor_legajo) PolizaActiva
                 ON legajo = PolizaActiva.Productor_legajo
             LEFT JOIN
                 (SELECT Productor_legajo, COUNT(*) iniciados, SUM(prima) comisionInicio
-                FROM poliza
+                FROM Poliza
                 WHERE estado_id = 1 AND inicio >= '{desde}' AND inicio <= '{hasta}' {condicionTipo}
                 GROUP BY Productor_legajo) PolizaInicia ON legajo = PolizaInicia.Productor_legajo
             LEFT JOIN
                 (SELECT Productor_legajo, COUNT(*) vencen, SUM(prima) comisionVence
-                FROM poliza
+                FROM Poliza
                 WHERE estado_id = 1 AND fin >= '{desde}' AND fin <= '{hasta}' {condicionTipo}
                 GROUP BY Productor_legajo) PolizaVence ON legajo = PolizaVence.Productor_legajo
             ORDER BY vencen_comision DESC;
