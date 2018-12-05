@@ -3,4 +3,5 @@ src/.vscode/.ropeproject/config.py
 src/.vscode/.ropeproject/objectdb
 *.pyc
 .vscode/*
+.idea/*
 etc/Thumbs.db
