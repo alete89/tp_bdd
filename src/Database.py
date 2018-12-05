@@ -83,7 +83,7 @@ class Database:
                 COALESCE(vencen, 0) vencen,
                 COALESCE(comisionVence, 0) vencen_comision,
                 (COALESCE(comisionInicio, 0) - COALESCE(comisionVence, 0)) balance
-            FROM productor
+            FROM Productor
             LEFT JOIN
                 (SELECT Productor_legajo, COUNT(*) activos, SUM(prima) comisionActivo
                 FROM Poliza
