@@ -27,6 +27,8 @@ class PolizaDialog(QtWidgets.QDialog):
         self.autoLabel.setText("Auto")
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.autoLabel)
         self.autoComboBox = QtWidgets.QComboBox(self)
+        for auto in self.db.getAutosList().fetchall():
+            self.autoComboBox.addItem("id/patente: " + str(auto[0]) + " - Modelo: " + auto[1])
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.autoComboBox)
         self.addAuto = QtWidgets.QPushButton()
         self.addAuto.setText("Agregar Auto")
