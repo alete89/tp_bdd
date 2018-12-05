@@ -100,14 +100,14 @@ class Database:
                 FROM Poliza
                 WHERE estado_id = 1 AND fin >= '{desde}' AND fin <= '{hasta}' {condicionTipo}
                 GROUP BY Productor_legajo) PolizaVence ON legajo = PolizaVence.Productor_legajo
-            ORDER BY vencen_comision DESC;
+            ORDER BY balance ASC;
         """)
         print(mycursor.statement)
         return mycursor
 
     def ejemploInsercionDePoliza(self):
         mycursor = self.db.cursor()
-         mycursor.execute(f"""
+        mycursor.execute(f"""
             INSERT INTO `Poliza` VALUES (NULL, '1', '2', '30123321', '6148', '2018-01-10', '2019-01-10', '34');
             INSERT INTO `Poliza_Vida` VALUES (LAST_INSERT_ID(), '5', '33333333', '11133');
         """)

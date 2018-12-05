@@ -3,6 +3,7 @@ from PyQt5 import QtWidgets
 
 def cargarTabla(tabla, resultado):
     tabla.clear()
+    tabla.setRowCount(0)
     tabla.setColumnCount(len(resultado.column_names))
     tabla.setHorizontalHeaderLabels(resultado.column_names)
     tabla.verticalHeader().hide()
