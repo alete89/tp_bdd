@@ -7,7 +7,7 @@ class ReporteDialog(QtWidgets.QDialog):
     def __init__(self):
         super(QtWidgets.QDialog, self).__init__()
         self.db = Database.getInstance()
-        self.resize(800, 600)
+        self.resize(1024, 768)
         self.verticalLayout = QtWidgets.QVBoxLayout(self)
         self.contenedorSuperior = QtWidgets.QHBoxLayout(self)
 
@@ -34,6 +34,7 @@ class ReporteDialog(QtWidgets.QDialog):
         self.comboFiltroTipoSeguro.addItems(["todas", "Auto", "Hogar", "Vida"])
 
         self.tablaReporte = QtWidgets.QTableWidget(self)
+        self.tablaReporte.setSelectionBehavior(QtWidgets.QTableView.SelectRows)
 
         self.buttonBox = QtWidgets.QDialogButtonBox(self)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
