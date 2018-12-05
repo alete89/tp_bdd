@@ -27,6 +27,12 @@ class ReporteDialog(QtWidgets.QDialog):
         self.datePickerHasta.setCalendarPopup(True)
         self.datePickerHasta.setDisplayFormat("dd-MM-yyyy")
 
+        self.labelTipoSeguro = QtWidgets.QLabel(self)
+        self.labelTipoSeguro.setText("Tipo de Póliza:")
+
+        self.comboFiltroTipoSeguro = QtWidgets.QComboBox(self)
+        self.comboFiltroTipoSeguro.addItems(["Auto", "Hogar", "Vida", "Todos"])
+
         self.tablaReporte = QtWidgets.QTableWidget(self)
 
         self.buttonBox = QtWidgets.QDialogButtonBox(self)
@@ -42,6 +48,8 @@ class ReporteDialog(QtWidgets.QDialog):
         self.contenedorSuperior.addWidget(self.datePickerDesde)
         self.contenedorSuperior.addWidget(self.labelHasta)
         self.contenedorSuperior.addWidget(self.datePickerHasta)
+        self.contenedorSuperior.addWidget(self.labelTipoSeguro)
+        self.contenedorSuperior.addWidget(self.comboFiltroTipoSeguro)
         self.verticalLayout.addWidget(self.tablaReporte)
         self.verticalLayout.addWidget(self.buttonBox)
 
