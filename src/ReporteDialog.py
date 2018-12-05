@@ -15,7 +15,7 @@ class ReporteDialog(QtWidgets.QDialog):
         self.labelDesde.setText("Desde:")
 
         self.datePickerDesde = QtWidgets.QDateEdit(self)
-        self.datePickerDesde.setDate(QtCore.QDate.currentDate())
+        self.datePickerDesde.setDate(QtCore.QDate.currentDate().addDays(-30))
         self.datePickerDesde.setCalendarPopup(True)
         self.datePickerDesde.setDisplayFormat("dd-MM-yyyy")
 
@@ -31,7 +31,7 @@ class ReporteDialog(QtWidgets.QDialog):
         self.labelTipoSeguro.setText("Tipo de Póliza:")
 
         self.comboFiltroTipoSeguro = QtWidgets.QComboBox(self)
-        self.comboFiltroTipoSeguro.addItems(["Auto", "Hogar", "Vida", "Todos"])
+        self.comboFiltroTipoSeguro.addItems(["todas", "Auto", "Hogar", "Vida"])
 
         self.tablaReporte = QtWidgets.QTableWidget(self)
 
@@ -53,7 +53,12 @@ class ReporteDialog(QtWidgets.QDialog):
         self.verticalLayout.addWidget(self.tablaReporte)
         self.verticalLayout.addWidget(self.buttonBox)
 
-        cargarTabla(self.tablaReporte, self.db.getEstadisticasComision())
+        desde = self.datePickerDesde.date().toString("yyyy-MM-dd")
+        hasta = self.datePickerHasta.date().toString("yyyy-MM-dd")
+        tipo = self.comboFiltroTipoSeguro.currentText()
+
+        cargarTabla(self.tablaReporte, self.db.getEstadisticasComision(
+            desde=desde, hasta=hasta, tipoPoliza=tipo))
 
 
 if __name__ == "__main__":
