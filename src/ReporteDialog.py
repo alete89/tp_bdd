@@ -53,10 +53,18 @@ class ReporteDialog(QtWidgets.QDialog):
         self.verticalLayout.addWidget(self.tablaReporte)
         self.verticalLayout.addWidget(self.buttonBox)
 
+        self.actualizarBusqueda()
+
+        # signals
+        self.datePickerDesde.dateChanged.connect(self.actualizarBusqueda)
+        self.datePickerHasta.dateChanged.connect(self.actualizarBusqueda)
+        self.comboFiltroTipoSeguro.currentIndexChanged.connect(self.actualizarBusqueda)
+
+    # slots
+    def actualizarBusqueda(self):
         desde = self.datePickerDesde.date().toString("yyyy-MM-dd")
         hasta = self.datePickerHasta.date().toString("yyyy-MM-dd")
         tipo = self.comboFiltroTipoSeguro.currentText()
-
         cargarTabla(self.tablaReporte, self.db.getEstadisticasComision(
             desde=desde, hasta=hasta, tipoPoliza=tipo))
 
