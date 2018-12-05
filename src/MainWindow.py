@@ -21,6 +21,7 @@ class Ui_MainWindow(object):
         self.labelTabla.setObjectName("labelTabla")
         self.columnaIzquierda.addWidget(self.labelTabla)
         self.tablaPolizas = QtWidgets.QTableWidget(self.centralwidget)
+        self.tablaPolizas.setSelectionBehavior(QtWidgets.QTableView.SelectRows)
         self.tablaPolizas.setObjectName("tablaPolizas")
         self.columnaIzquierda.addWidget(self.tablaPolizas)
         self.horizontalLayout.addLayout(self.columnaIzquierda)
