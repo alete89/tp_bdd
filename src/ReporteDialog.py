@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Database import Database
+from utils import cargarTabla
 
 
 class ReporteDialog(QtWidgets.QDialog):
@@ -43,6 +44,8 @@ class ReporteDialog(QtWidgets.QDialog):
         self.contenedorSuperior.addWidget(self.datePickerHasta)
         self.verticalLayout.addWidget(self.tablaReporte)
         self.verticalLayout.addWidget(self.buttonBox)
+
+        cargarTabla(self.tablaReporte, self.db.getEstadisticasComision())
 
 
 if __name__ == "__main__":
