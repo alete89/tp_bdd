@@ -339,7 +339,7 @@ DROP TABLE IF EXISTS `Poliza`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Poliza` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `Estado_id` int(11) NOT NULL,
   `Productor_legajo` int(11) NOT NULL,
   `Persona_dni` int(11) NOT NULL,

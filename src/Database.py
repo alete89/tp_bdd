@@ -104,3 +104,10 @@ class Database:
         """)
         print(mycursor.statement)
         return mycursor
+
+    def ejemploInsercionDePoliza():
+        mycursor = self.db.cursor()
+         mycursor.execute(f"""
+            INSERT INTO `Poliza` VALUES (NULL, '1', '2', '30123321', '6148', '2018-01-10', '2019-01-10', '34');
+            INSERT INTO `Poliza_Vida` VALUES (LAST_INSERT_ID(), '5', '33333333', '11133');
+        """)
