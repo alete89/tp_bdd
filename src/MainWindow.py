@@ -5,12 +5,13 @@ from utils import cargarTabla
 
 
 class Ui_MainWindow(object):
+    pagina = 1
     def setupUi(self, MainWindow):
         self.db = db.getInstance()
         self.db.startDbConnection()
 
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 600)
+        MainWindow.resize(1024, 650)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
@@ -40,6 +41,17 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
+
+        self.anteriorButton = QtWidgets.QPushButton(self.centralwidget)
+        self.anteriorButton.setObjectName("anteriorButton")
+        self.statusbar.addWidget(self.anteriorButton)
+        self.paginaLabel = QtWidgets.QLabel(self.centralwidget)
+        self.paginaLabel.setObjectName("paginaLabel")
+        self.statusbar.addWidget(self.paginaLabel)
+        self.siguienteButton = QtWidgets.QPushButton(self.centralwidget)
+        self.siguienteButton.setObjectName("siguienteButton")
+        self.statusbar.addWidget(self.siguienteButton)
+
         MainWindow.setStatusBar(self.statusbar)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 25))
@@ -80,18 +92,34 @@ class Ui_MainWindow(object):
         self.actionAcerca_de.setToolTip(
             _translate("MainWindow", "Acerca de este TP"))
 
+        self.anteriorButton.setText(_translate("MainWindow", "Anterior"))
+        self.siguienteButton.setText(_translate("MainWindow", "Siguiente"))
+        
+            
         # conexión
         self.nuevaButton.clicked.connect(self.openNuevaPolizaDialog)
+        self.anteriorButton.clicked.connect(self.anteriorPagina)
+        self.siguienteButton.clicked.connect(self.siguientePagina)
 
-        self.loadAutoresIntoTable()
+        self.actualizarPagina()
 
     def openNuevaPolizaDialog(self):
         dialog = PolizaDialog()
         dialog.exec_()
 
-    def loadAutoresIntoTable(self):
-        cargarTabla(self.tablaPolizas, self.db.getPolizasAutoList())
+    def anteriorPagina(self):
+        if self.pagina > 1:
+            self.pagina -= 1
+        self.actualizarPagina()
 
+    def siguientePagina(self):
+        self.pagina += 1
+        self.actualizarPagina()
+    
+    def actualizarPagina(self):
+        _translate = QtCore.QCoreApplication.translate
+        self.paginaLabel.setText(_translate("MainWindow", f"Pagina: {self.pagina}"))
+        cargarTabla(self.tablaPolizas, self.db.getPolizasAutoList(self.pagina))
 
 if __name__ == "__main__":
     import sys

@@ -30,10 +30,10 @@ class Database:
         # Cierra conexión con la base de datos
         self.db.close()
 
-    def getPolizasAutoList(self):
+    def getPolizasAutoList(self, pagina = 1, limite = 15):
         mycursor = self.db.cursor()
         mycursor.execute(
-            "SELECT * FROM Poliza_Auto INNER JOIN Poliza ON poliza_id = Poliza.id;")
+            f"SELECT * FROM Poliza_Auto INNER JOIN Poliza ON poliza_id = Poliza.id ORDER BY poliza_id DESC LIMIT {(pagina-1)*limite},{limite};")
         return mycursor
 
     def getProductoresList(self):
