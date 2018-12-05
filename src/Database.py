@@ -51,7 +51,7 @@ class Database:
     def getAutosList(self):
         mycursor = self.db.cursor()
         mycursor.execute(
-            "SELECT XXXXXXXXXXXXXXXXXXXXXXX FROM Auto;")
+            "select aut.id, model.nombre from tpSeguros.Auto as aut inner join tpSeguros.Modelo as model on aut.id = model.id ;")
         return mycursor
 
     def getGruposRiesgoList(self):
