@@ -1,7 +1,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Database import Database as db
-from NuevaPolizaDialog import Ui_NuevaPolizaDialog
-from  utils import cargarTabla
+from PolizaDialog import PolizaDialog
+from utils import cargarTabla
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -84,9 +85,7 @@ class Ui_MainWindow(object):
         self.loadAutoresIntoTable()
 
     def openNuevaPolizaDialog(self):
-        dialog = QtWidgets.QDialog()
-        ui = Ui_NuevaPolizaDialog()
-        ui.setupUi(dialog)
+        dialog = PolizaDialog()
         dialog.exec_()
 
     def loadAutoresIntoTable(self):
