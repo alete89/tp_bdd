@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Database import Database
+from PolizaAuto import PolizaAuto
 
 
 class PolizaDialog(QtWidgets.QDialog):
@@ -62,7 +63,7 @@ class PolizaDialog(QtWidgets.QDialog):
             QtWidgets.QDialogButtonBox.Cancel | QtWidgets.QDialogButtonBox.Ok)
         self.verticalLayout.addWidget(self.buttonBox)
 
-        self.buttonBox.accepted.connect(self.accept)
+        self.buttonBox.accepted.connect(lambda esNueva=esNueva: self.handleOK(esNueva))
         self.buttonBox.rejected.connect(self.reject)
         QtCore.QMetaObject.connectSlotsByName(self)
 
@@ -92,6 +93,27 @@ class PolizaDialog(QtWidgets.QDialog):
         self.franquiciaLineEdit.setText(rowData[3].text())
         fechaPoliza = QtCore.QDate.fromString(rowData[9].text(), "yyyy-MM-dd")
         self.validoDesdeDateEdit.setDate(fechaPoliza)
+
+    def handleOK(self, esNueva):
+        poliza = PolizaAuto()
+        # reemplazar por constructor
+        poliza.estado = 1
+        poliza.productorLegajo = self.productorComboBox.currentData()
+        poliza.clienteDni = self.conductorComboBox.currentData()
+        poliza.franquicia = float(self.franquiciaLineEdit.text())
+        poliza.autoId = self.autoComboBox.currentData()
+        poliza.grupoRiesgoId = self.GrupoDeRiesgoCombo.currentData()
+        poliza.fechaInicio = self.validoDesdeDateEdit.date().toString("yyyy-MM-dd")
+        poliza.porcentajeProductor = 10
+        poliza.calcularPrima()
+        poliza.calcularFechaFin()
+
+        # reemplazar por constructor
+        if (esNueva):
+            print(poliza)
+            self.db.insercionPolizaAuto(poliza)
+
+        self.accept()
 
 
 if __name__ == "__main__":
