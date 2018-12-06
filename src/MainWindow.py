@@ -12,7 +12,7 @@ class Ui_MainWindow(object):
         self.db.startDbConnection()
 
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1024, 650)
+        MainWindow.resize(1300, 650)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
