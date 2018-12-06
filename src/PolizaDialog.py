@@ -14,21 +14,23 @@ class PolizaDialog(QtWidgets.QDialog):
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.productorLabel)
         self.productorComboBox = QtWidgets.QComboBox(self)
         for productor in self.db.getProductoresList().fetchall():
-            self.productorComboBox.addItem(str(productor[1] + " " + productor[0]), userData=productor)
+            self.productorComboBox.addItem(
+                str(productor[1] + " " + productor[0]), userData=productor[2])
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.productorComboBox)
         self.conductorLabel = QtWidgets.QLabel(self)
         self.conductorLabel.setText("Conductor")
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.conductorLabel)
         self.conductorComboBox = QtWidgets.QComboBox(self)
         for persona in self.db.getPersonasList().fetchall():
-            self.conductorComboBox.addItem(str(persona[1] + " " + persona[0]))
+            self.conductorComboBox.addItem(str(persona[1] + " " + persona[0]), userData=persona[2])
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.conductorComboBox)
         self.autoLabel = QtWidgets.QLabel(self)
         self.autoLabel.setText("Auto")
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.autoLabel)
         self.autoComboBox = QtWidgets.QComboBox(self)
         for auto in self.db.getAutosList().fetchall():
-            self.autoComboBox.addItem("id/patente: " + str(auto[0]) + " - Modelo: " + auto[1])
+            self.autoComboBox.addItem(
+                "id/patente: " + str(auto[0]) + " - Modelo: " + auto[1], userData=auto[0])
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.autoComboBox)
         self.addAuto = QtWidgets.QPushButton()
         self.addAuto.setText("Agregar Auto")
@@ -38,7 +40,7 @@ class PolizaDialog(QtWidgets.QDialog):
         self.formLayout.setWidget(4, QtWidgets.QFormLayout.LabelRole, self.grupoDeRiesgoLabel)
         self.GrupoDeRiesgoCombo = QtWidgets.QComboBox(self)
         for grupoRiesgo in self.db.getGruposRiesgoList().fetchall():
-            self.GrupoDeRiesgoCombo.addItem(str(grupoRiesgo[0]))
+            self.GrupoDeRiesgoCombo.addItem(str(grupoRiesgo[1]), userData=grupoRiesgo[0])
         self.formLayout.setWidget(4, QtWidgets.QFormLayout.FieldRole, self.GrupoDeRiesgoCombo)
         self.franquiciaLabel = QtWidgets.QLabel(self)
         self.franquiciaLabel.setText("Franquicia")
