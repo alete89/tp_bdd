@@ -52,7 +52,13 @@ class Database:
     def getAutosList(self):
         mycursor = self.db.cursor()
         mycursor.execute(
-            "select aut.id, model.nombre from tpSeguros.Auto as aut inner join tpSeguros.Modelo as model on aut.id = model.id ;")
+            """
+                SELECT Auto.id, Modelo.nombre, Marca.nombre FROM Auto 
+                INNER JOIN Modelo 
+                ON Auto.Anio_Modelo_Modelo_id = Modelo.id
+                INNER JOIN Marca
+                ON Modelo.Marca_id = Marca.id;
+            """)
         print(mycursor.statement)
         return mycursor
 
