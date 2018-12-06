@@ -6,6 +6,7 @@ from utils import cargarTabla
 
 class Ui_MainWindow(object):
     pagina = 1
+
     def setupUi(self, MainWindow):
         self.db = db.getInstance()
         self.db.startDbConnection()
@@ -94,10 +95,10 @@ class Ui_MainWindow(object):
 
         self.anteriorButton.setText(_translate("MainWindow", "Anterior"))
         self.siguienteButton.setText(_translate("MainWindow", "Siguiente"))
-        
-            
+
         # conexión
         self.nuevaButton.clicked.connect(self.openNuevaPolizaDialog)
+        self.editarButton.clicked.connect(self.openEditarPolizaDialog)
         self.anteriorButton.clicked.connect(self.anteriorPagina)
         self.siguienteButton.clicked.connect(self.siguientePagina)
 
@@ -107,6 +108,13 @@ class Ui_MainWindow(object):
         dialog = PolizaDialog()
         dialog.exec_()
 
+    def openEditarPolizaDialog(self):
+        if (self.tablaPolizas.selectedItems()):
+            dialog = PolizaDialog(False, self.tablaPolizas.selectedItems())
+            dialog.exec_()
+        else:
+            print("no se seleccionó ninguna fila para editar")
+
     def anteriorPagina(self):
         if self.pagina > 1:
             self.pagina -= 1
@@ -115,11 +123,12 @@ class Ui_MainWindow(object):
     def siguientePagina(self):
         self.pagina += 1
         self.actualizarPagina()
-    
+
     def actualizarPagina(self):
         _translate = QtCore.QCoreApplication.translate
         self.paginaLabel.setText(_translate("MainWindow", f"Pagina: {self.pagina}"))
         cargarTabla(self.tablaPolizas, self.db.getPolizasAutoList(self.pagina))
+
 
 if __name__ == "__main__":
     import sys

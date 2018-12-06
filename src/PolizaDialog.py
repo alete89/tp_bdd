@@ -3,7 +3,7 @@ from Database import Database
 
 
 class PolizaDialog(QtWidgets.QDialog):
-    def __init__(self):
+    def __init__(self, esNueva=True, rowData=None):
         super(QtWidgets.QDialog, self).__init__()
         self.db = Database.getInstance()
         self.resize(400, 367)
@@ -63,6 +63,24 @@ class PolizaDialog(QtWidgets.QDialog):
         self.buttonBox.accepted.connect(self.accept)
         self.buttonBox.rejected.connect(self.reject)
         QtCore.QMetaObject.connectSlotsByName(self)
+
+        if (esNueva):
+            self.dialogNuevaPoliza()
+        else:
+            if not rowData:
+                self.reject()
+            else:
+                self.dialogEditarPoliza(rowData)
+
+    def dialogNuevaPoliza(self):
+        self.productorComboBox.setCurrentIndex(-1)
+        self.autoComboBox.setCurrentIndex(-1)
+        self.GrupoDeRiesgoCombo.setCurrentIndex(-1)
+        self.conductorComboBox.setCurrentIndex(-1)
+
+    def dialogEditarPoliza(self, rowData):
+        for columna in rowData:
+            print(columna.text())
 
 
 if __name__ == "__main__":
