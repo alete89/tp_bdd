@@ -90,7 +90,6 @@ class PolizaDialog(QtWidgets.QDialog):
         grupoRiesgoIndex = self.GrupoDeRiesgoCombo.findData(rowData[2].text())
         self.GrupoDeRiesgoCombo.setCurrentIndex(grupoRiesgoIndex)
         self.franquiciaLineEdit.setText(rowData[3].text())
-        texto = rowData[9].text()
         fechaPoliza = QtCore.QDate.fromString(rowData[9].text(), "yyyy-MM-dd")
         self.validoDesdeDateEdit.setDate(fechaPoliza)
 
