@@ -118,7 +118,7 @@ class Ui_MainWindow(object):
     def anteriorPagina(self):
         if self.pagina > 1:
             self.pagina -= 1
-        self.actualizarPagina()
+            self.actualizarPagina()
 
     def siguientePagina(self):
         self.pagina += 1

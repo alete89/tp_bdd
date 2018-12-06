@@ -1,4 +1,5 @@
 import mysql.connector
+import PolizaAuto
 
 
 class Database:
@@ -30,7 +31,7 @@ class Database:
         # Cierra conexión con la base de datos
         self.db.close()
 
-    def getPolizasAutoList(self, pagina = 1, limite = 15):
+    def getPolizasAutoList(self, pagina=1, limite=15):
         mycursor = self.db.cursor()
         mycursor.execute(
             f"SELECT * FROM Poliza_Auto INNER JOIN Poliza ON poliza_id = Poliza.id ORDER BY poliza_id DESC LIMIT {(pagina-1)*limite},{limite};")
@@ -52,6 +53,7 @@ class Database:
         mycursor = self.db.cursor()
         mycursor.execute(
             "select aut.id, model.nombre from tpSeguros.Auto as aut inner join tpSeguros.Modelo as model on aut.id = model.id ;")
+        print(mycursor.statement)
         return mycursor
 
     def getGruposRiesgoList(self):
@@ -105,9 +107,27 @@ class Database:
         print(mycursor.statement)
         return mycursor
 
-    def ejemploInsercionDePoliza(self):
+    def insercionPolizaAuto(self, poliza: PolizaAuto):
         mycursor = self.db.cursor()
+
         mycursor.execute(f"""
-            INSERT INTO `Poliza` VALUES (NULL, '1', '2', '30123321', '6148', '2018-01-10', '2019-01-10', '34');
-            INSERT INTO `Poliza_Vida` VALUES (LAST_INSERT_ID(), '5', '33333333', '11133');
+            INSERT INTO `Poliza` VALUES (NULL, '1', '{poliza.productorLegajo}', '{poliza.clienteDni}', '{poliza.prima}',
+                '{poliza.fechaInicio}', '{poliza.fechaFin}', '{poliza.porcentajeProductor}');
+            INSERT INTO `Poliza_Auto` VALUES (LAST_INSERT_ID(), '{poliza.autoId}', '{poliza.grupoRiesgoId}',
+                '{poliza.franquicia}');
         """)
+        print(mycursor.statement)
+
+    def actualizacionPolizaAuto(self, poliza: PolizaAuto):
+        mycursor = self.db.cursor()
+
+        mycursor.execute(f"""
+            UPDATE `Poliza` SET Estado_id = '{poliza.estado}', Productor_legajo = '{poliza.productorLegajo}',
+                Persona_dni = '{poliza.clienteDni}', prima = '{poliza.prima}', inicio = '{poliza.fechaInicio}',
+                fin = '{poliza.fechaFin}', porcentaje_productor = '{poliza.porcentajeProductor}'
+            WHERE id = {poliza.id};
+            UPDATE `Poliza_Auto` SET Auto_id = '{poliza.autoId}', Grupo_Riesgo_id = '{poliza.grupoRiesgoId}',
+                franquicia = '{poliza.franquicia}'
+            WHERE Poliza_id = {poliza.id};
+        """)
+        print(mycursor.statement)
