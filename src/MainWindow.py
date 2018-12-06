@@ -12,7 +12,7 @@ class Ui_MainWindow(object):
         self.db.startDbConnection()
 
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1300, 650)
+        MainWindow.resize(1350, 650)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
@@ -106,12 +106,17 @@ class Ui_MainWindow(object):
 
     def openNuevaPolizaDialog(self):
         dialog = PolizaDialog()
-        dialog.exec_()
+        result = dialog.exec_()
+        if (result):
+            self.actualizarPagina()
 
     def openEditarPolizaDialog(self):
         if (self.tablaPolizas.selectedItems()):
             dialog = PolizaDialog(False, self.tablaPolizas.selectedItems())
-            dialog.exec_()
+            result = dialog.exec_()
+            if (result):
+                self.actualizarPagina()
+
         else:
             print("no se seleccionó ninguna fila para editar")
 
