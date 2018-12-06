@@ -66,8 +66,6 @@ class PolizaDialog(QtWidgets.QDialog):
         self.buttonBox.rejected.connect(self.reject)
         QtCore.QMetaObject.connectSlotsByName(self)
 
-        self.productorComboBox.currentTextChanged.connect(self.comboboxProductorChanged)
-
         if (esNueva):
             self.dialogNuevaPoliza()
         else:
@@ -83,11 +81,18 @@ class PolizaDialog(QtWidgets.QDialog):
         self.conductorComboBox.setCurrentIndex(-1)
 
     def dialogEditarPoliza(self, rowData):
-        for columna in rowData:
-            print(columna.text())
-
-    def comboboxProductorChanged(self):
-        print(self.productorComboBox.currentData())
+        productorIndex = self.productorComboBox.findData(rowData[6].text())
+        self.productorComboBox.setCurrentIndex(productorIndex)
+        personaIndex = self.conductorComboBox.findData(rowData[7].text())
+        self.conductorComboBox.setCurrentIndex(personaIndex)
+        autoIndex = self.autoComboBox.findData(rowData[1].text())
+        self.autoComboBox.setCurrentIndex(autoIndex)
+        grupoRiesgoIndex = self.GrupoDeRiesgoCombo.findData(rowData[2].text())
+        self.GrupoDeRiesgoCombo.setCurrentIndex(grupoRiesgoIndex)
+        self.franquiciaLineEdit.setText(rowData[3].text())
+        texto = rowData[9].text()
+        fechaPoliza = QtCore.QDate.fromString(rowData[9].text(), "yyyy-MM-dd")
+        self.validoDesdeDateEdit.setDate(fechaPoliza)
 
 
 if __name__ == "__main__":
