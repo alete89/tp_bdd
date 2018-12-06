@@ -5,9 +5,11 @@ from PolizaAuto import PolizaAuto
 
 class PolizaDialog(QtWidgets.QDialog):
     esNueva = False
+
     def __init__(self, esNueva=True, rowData=None):
         super(QtWidgets.QDialog, self).__init__()
         self.esNueva = esNueva
+        self.rowData = rowData
 
         self.db = Database.getInstance()
         self.resize(400, 367)
@@ -32,9 +34,14 @@ class PolizaDialog(QtWidgets.QDialog):
         self.autoLabel.setText("Auto")
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.autoLabel)
         self.autoComboBox = QtWidgets.QComboBox(self)
-        for auto in self.db.getAutosList():
-            self.autoComboBox.addItem(
-                "id/patente: " + str(auto[0]) + " - Modelo: " + auto[1], userData=auto[0])
+        if (esNueva):
+            for auto in self.db.getAutosList():
+                self.autoComboBox.addItem(
+                    "id/patente: " + str(auto[0]) + " - Modelo: " + auto[1], userData=auto[0])
+        else:
+            for auto in self.db.getAutosList(rowData[1].text()):
+                self.autoComboBox.addItem(
+                    "id/patente: " + str(auto[0]) + " - Modelo: " + auto[1], userData=auto[0])
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.autoComboBox)
         self.addAuto = QtWidgets.QPushButton()
         self.addAuto.setText("Agregar Auto")
@@ -100,7 +107,7 @@ class PolizaDialog(QtWidgets.QDialog):
     def handleOK(self):
         poliza = PolizaAuto()
         # reemplazar por constructor
-        poliza.estado = 1
+
         poliza.productorLegajo = self.productorComboBox.currentData()
         poliza.clienteDni = self.conductorComboBox.currentData()
         poliza.franquicia = float(self.franquiciaLineEdit.text())
@@ -112,10 +119,14 @@ class PolizaDialog(QtWidgets.QDialog):
         poliza.calcularFechaFin()
 
         # reemplazar por constructor
+        print(poliza)
         if (self.esNueva):
-            print(poliza)
+            poliza.estado = 1
             self.db.insercionPolizaAuto(poliza)
-
+        else:
+            poliza.id = self.rowData[0].text()
+            poliza.estado = self.rowData[5].text()
+            self.db.actualizacionPolizaAuto(poliza)
         self.accept()
 
 

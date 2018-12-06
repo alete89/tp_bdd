@@ -23,8 +23,8 @@ class Database:
         self.db = mysql.connector.connect(
             host="localhost",
             user="root",
-            passwd="password",
-            database="tpseguros"
+            passwd="bwxor",
+            database="tpSeguros"
         )
 
     def closeDbConnection(self):
@@ -35,7 +35,7 @@ class Database:
         mycursor = self.db.cursor()
         mycursor.execute(
             f"SELECT * FROM Poliza_Auto INNER JOIN Poliza ON poliza_id = Poliza.id ORDER BY poliza_id DESC LIMIT {(pagina-1)*limite},{limite};")
-        return mycursor.fetchall(), mycursor.column_names, 
+        return mycursor.fetchall(), mycursor.column_names,
 
     def getProductoresList(self):
         mycursor = self.db.cursor()
@@ -49,15 +49,24 @@ class Database:
             "SELECT apellido, nombre, dni FROM Persona;")
         return mycursor.fetchall()
 
-    def getAutosList(self):
+    def getAutosList(self, idActual=None):
         mycursor = self.db.cursor()
+
+        condicionIdActual = ""
+        if idActual != None:
+            condicionIdActual = f"Auto.id = {idActual} OR"
         mycursor.execute(
-            """
+            f"""
                 SELECT Auto.id, Modelo.nombre, Marca.nombre FROM Auto 
                 INNER JOIN Modelo 
                 ON Auto.Anio_Modelo_Modelo_id = Modelo.id
                 INNER JOIN Marca
-                ON Modelo.Marca_id = Marca.id;
+                ON Modelo.Marca_id = Marca.id
+                WHERE {condicionIdActual} NOT EXISTS (
+                    SELECT 1 FROM Poliza_Auto
+                    INNER JOIN Poliza ON Poliza_Auto.poliza_id = Poliza.id
+                    WHERE Auto.id = Poliza_Auto.Auto_id AND Poliza.Estado_id = 1
+                );
             """)
         print(mycursor.statement)
         return mycursor.fetchall()
@@ -118,24 +127,35 @@ class Database:
 
         mycursor.execute(f"""
             INSERT INTO `Poliza` VALUES (NULL, '1', '{poliza.productorLegajo}', '{poliza.clienteDni}', '{poliza.prima}',
-                '{poliza.fechaInicio}', '{poliza.fechaFin}', '{poliza.porcentajeProductor}');
+                '{poliza.fechaInicio}', '{poliza.fechaFin}', '{poliza.porcentajeProductor}');""")
+        id_insertado = mycursor.lastrowid
+        mycursor.execute(f"""
             INSERT INTO `Poliza_Auto` VALUES (LAST_INSERT_ID(), '{poliza.autoId}', '{poliza.grupoRiesgoId}',
                 '{poliza.franquicia}');
         """)
+        self.db.commit()
         print(mycursor.statement)
-        
-        self.startDbConnection()
+        print(id_insertado)
 
     def actualizacionPolizaAuto(self, poliza: PolizaAuto):
         mycursor = self.db.cursor()
+        print(f"""
+            UPDATE `Poliza` SET Estado_id = '{poliza.estado}', Productor_legajo = '{poliza.productorLegajo}',
+                Persona_dni = '{poliza.clienteDni}', prima = '{poliza.prima}', inicio = '{poliza.fechaInicio}',
+                fin = '{poliza.fechaFin}', porcentaje_productor = '{poliza.porcentajeProductor}'
+            WHERE id = {poliza.id};
+        """)
 
         mycursor.execute(f"""
             UPDATE `Poliza` SET Estado_id = '{poliza.estado}', Productor_legajo = '{poliza.productorLegajo}',
                 Persona_dni = '{poliza.clienteDni}', prima = '{poliza.prima}', inicio = '{poliza.fechaInicio}',
                 fin = '{poliza.fechaFin}', porcentaje_productor = '{poliza.porcentajeProductor}'
             WHERE id = {poliza.id};
+        """)
+        mycursor.execute(f"""
             UPDATE `Poliza_Auto` SET Auto_id = '{poliza.autoId}', Grupo_Riesgo_id = '{poliza.grupoRiesgoId}',
                 franquicia = '{poliza.franquicia}'
             WHERE Poliza_id = {poliza.id};
         """)
+        self.db.commit()
         print(mycursor.statement)
