@@ -40,13 +40,13 @@ class Database:
     def getProductoresList(self):
         mycursor = self.db.cursor()
         mycursor.execute(
-            "SELECT apellido, nombre FROM Productor;")
+            "SELECT apellido, nombre, legajo FROM Productor;")
         return mycursor
 
     def getPersonasList(self):
         mycursor = self.db.cursor()
         mycursor.execute(
-            "SELECT apellido, nombre FROM Persona;")
+            "SELECT apellido, nombre, dni FROM Persona;")
         return mycursor
 
     def getAutosList(self):
@@ -65,7 +65,7 @@ class Database:
     def getGruposRiesgoList(self):
         mycursor = self.db.cursor()
         mycursor.execute(
-            "SELECT descripcion FROM Grupo_Riesgo;")
+            "SELECT id, descripcion FROM Grupo_Riesgo;")
         return mycursor
 
     def getEstadisticasComision(self, desde='2018-11-01', hasta='2018-12-01', tipoPoliza='todas'):
