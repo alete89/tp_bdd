@@ -14,7 +14,7 @@ class PolizaDialog(QtWidgets.QDialog):
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.productorLabel)
         self.productorComboBox = QtWidgets.QComboBox(self)
         for productor in self.db.getProductoresList().fetchall():
-            self.productorComboBox.addItem(str(productor[1] + " " + productor[0]))
+            self.productorComboBox.addItem(str(productor[1] + " " + productor[0]), userData=productor)
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.productorComboBox)
         self.conductorLabel = QtWidgets.QLabel(self)
         self.conductorLabel.setText("Conductor")
@@ -64,6 +64,8 @@ class PolizaDialog(QtWidgets.QDialog):
         self.buttonBox.rejected.connect(self.reject)
         QtCore.QMetaObject.connectSlotsByName(self)
 
+        self.productorComboBox.currentTextChanged.connect(self.comboboxProductorChanged)
+
         if (esNueva):
             self.dialogNuevaPoliza()
         else:
@@ -81,6 +83,9 @@ class PolizaDialog(QtWidgets.QDialog):
     def dialogEditarPoliza(self, rowData):
         for columna in rowData:
             print(columna.text())
+
+    def comboboxProductorChanged(self):
+        print(self.productorComboBox.currentData())
 
 
 if __name__ == "__main__":
