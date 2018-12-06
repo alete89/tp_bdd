@@ -66,7 +66,7 @@ class ReporteDialog(QtWidgets.QDialog):
         desde = self.datePickerDesde.date().toString("yyyy-MM-dd")
         hasta = self.datePickerHasta.date().toString("yyyy-MM-dd")
         tipo = self.comboFiltroTipoSeguro.currentText()
-        cargarTabla(self.tablaReporte, self.db.getEstadisticasComision(
+        cargarTabla(self.tablaReporte, *self.db.getEstadisticasComision(
             desde=desde, hasta=hasta, tipoPoliza=tipo))
 
 

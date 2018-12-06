@@ -132,7 +132,7 @@ class Ui_MainWindow(object):
     def actualizarPagina(self):
         _translate = QtCore.QCoreApplication.translate
         self.paginaLabel.setText(_translate("MainWindow", f"Pagina: {self.pagina}"))
-        cargarTabla(self.tablaPolizas, self.db.getPolizasAutoList(self.pagina))
+        cargarTabla(self.tablaPolizas, *self.db.getPolizasAutoList(self.pagina))
 
 
 if __name__ == "__main__":

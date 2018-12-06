@@ -4,8 +4,11 @@ from PolizaAuto import PolizaAuto
 
 
 class PolizaDialog(QtWidgets.QDialog):
+    esNueva = False
     def __init__(self, esNueva=True, rowData=None):
         super(QtWidgets.QDialog, self).__init__()
+        self.esNueva = esNueva
+
         self.db = Database.getInstance()
         self.resize(400, 367)
         self.verticalLayout = QtWidgets.QVBoxLayout(self)
@@ -14,7 +17,7 @@ class PolizaDialog(QtWidgets.QDialog):
         self.productorLabel.setText("Productor")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.productorLabel)
         self.productorComboBox = QtWidgets.QComboBox(self)
-        for productor in self.db.getProductoresList().fetchall():
+        for productor in self.db.getProductoresList():
             self.productorComboBox.addItem(
                 str(productor[1] + " " + productor[0]), userData=productor[2])
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.productorComboBox)
@@ -22,14 +25,14 @@ class PolizaDialog(QtWidgets.QDialog):
         self.conductorLabel.setText("Conductor")
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.conductorLabel)
         self.conductorComboBox = QtWidgets.QComboBox(self)
-        for persona in self.db.getPersonasList().fetchall():
+        for persona in self.db.getPersonasList():
             self.conductorComboBox.addItem(str(persona[1] + " " + persona[0]), userData=persona[2])
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.conductorComboBox)
         self.autoLabel = QtWidgets.QLabel(self)
         self.autoLabel.setText("Auto")
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.autoLabel)
         self.autoComboBox = QtWidgets.QComboBox(self)
-        for auto in self.db.getAutosList().fetchall():
+        for auto in self.db.getAutosList():
             self.autoComboBox.addItem(
                 "id/patente: " + str(auto[0]) + " - Modelo: " + auto[1], userData=auto[0])
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.autoComboBox)
@@ -40,7 +43,7 @@ class PolizaDialog(QtWidgets.QDialog):
         self.grupoDeRiesgoLabel.setText("Grupo de Riesgo")
         self.formLayout.setWidget(4, QtWidgets.QFormLayout.LabelRole, self.grupoDeRiesgoLabel)
         self.GrupoDeRiesgoCombo = QtWidgets.QComboBox(self)
-        for grupoRiesgo in self.db.getGruposRiesgoList().fetchall():
+        for grupoRiesgo in self.db.getGruposRiesgoList():
             self.GrupoDeRiesgoCombo.addItem(str(grupoRiesgo[1]), userData=grupoRiesgo[0])
         self.formLayout.setWidget(4, QtWidgets.QFormLayout.FieldRole, self.GrupoDeRiesgoCombo)
         self.franquiciaLabel = QtWidgets.QLabel(self)
@@ -63,7 +66,7 @@ class PolizaDialog(QtWidgets.QDialog):
             QtWidgets.QDialogButtonBox.Cancel | QtWidgets.QDialogButtonBox.Ok)
         self.verticalLayout.addWidget(self.buttonBox)
 
-        self.buttonBox.accepted.connect(lambda esNueva=esNueva: self.handleOK(esNueva))
+        self.buttonBox.accepted.connect(self.handleOK)
         self.buttonBox.rejected.connect(self.reject)
         QtCore.QMetaObject.connectSlotsByName(self)
 
@@ -94,7 +97,7 @@ class PolizaDialog(QtWidgets.QDialog):
         fechaPoliza = QtCore.QDate.fromString(rowData[9].text(), "yyyy-MM-dd")
         self.validoDesdeDateEdit.setDate(fechaPoliza)
 
-    def handleOK(self, esNueva):
+    def handleOK(self):
         poliza = PolizaAuto()
         # reemplazar por constructor
         poliza.estado = 1
@@ -109,7 +112,7 @@ class PolizaDialog(QtWidgets.QDialog):
         poliza.calcularFechaFin()
 
         # reemplazar por constructor
-        if (esNueva):
+        if (self.esNueva):
             print(poliza)
             self.db.insercionPolizaAuto(poliza)
 

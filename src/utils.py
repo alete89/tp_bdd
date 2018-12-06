@@ -1,14 +1,17 @@
 from PyQt5 import QtWidgets
+from PyQt5 import QtCore
 
-
-def cargarTabla(tabla, resultado):
+def cargarTabla(tabla, values, columnNames):
     tabla.clear()
     tabla.setRowCount(0)
-    tabla.setColumnCount(len(resultado.column_names))
-    tabla.setHorizontalHeaderLabels(resultado.column_names)
+    tabla.setColumnCount(len(columnNames))
+    tabla.setHorizontalHeaderLabels(columnNames)
     tabla.verticalHeader().hide()
-    for rowNumber, rowData in enumerate(resultado.fetchall()):
+    for rowNumber, rowData in enumerate(values):
         tabla.insertRow(rowNumber)
         for columnNumber, data in enumerate(rowData):
-            tabla.setItem(
-                rowNumber, columnNumber, QtWidgets.QTableWidgetItem(str(data)))
+            value = f'{data:0.2f}' if isinstance(data, float) else f'{data}'
+            item = QtWidgets.QTableWidgetItem(value)
+            if isinstance(data, float) or isinstance(data, int):
+                item.setTextAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignVCenter)
+            tabla.setItem(rowNumber, columnNumber, item)

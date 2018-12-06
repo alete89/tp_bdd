@@ -35,19 +35,19 @@ class Database:
         mycursor = self.db.cursor()
         mycursor.execute(
             f"SELECT * FROM Poliza_Auto INNER JOIN Poliza ON poliza_id = Poliza.id ORDER BY poliza_id DESC LIMIT {(pagina-1)*limite},{limite};")
-        return mycursor
+        return mycursor.fetchall(), mycursor.column_names, 
 
     def getProductoresList(self):
         mycursor = self.db.cursor()
         mycursor.execute(
             "SELECT apellido, nombre, legajo FROM Productor;")
-        return mycursor
+        return mycursor.fetchall()
 
     def getPersonasList(self):
         mycursor = self.db.cursor()
         mycursor.execute(
             "SELECT apellido, nombre, dni FROM Persona;")
-        return mycursor
+        return mycursor.fetchall()
 
     def getAutosList(self):
         mycursor = self.db.cursor()
@@ -60,13 +60,13 @@ class Database:
                 ON Modelo.Marca_id = Marca.id;
             """)
         print(mycursor.statement)
-        return mycursor
+        return mycursor.fetchall()
 
     def getGruposRiesgoList(self):
         mycursor = self.db.cursor()
         mycursor.execute(
             "SELECT id, descripcion FROM Grupo_Riesgo;")
-        return mycursor
+        return mycursor.fetchall()
 
     def getEstadisticasComision(self, desde='2018-11-01', hasta='2018-12-01', tipoPoliza='todas'):
         mycursor = self.db.cursor()
@@ -111,7 +111,7 @@ class Database:
             ORDER BY balance ASC;
         """)
         print(mycursor.statement)
-        return mycursor
+        return mycursor.fetchall(), mycursor.column_names
 
     def insercionPolizaAuto(self, poliza: PolizaAuto):
         mycursor = self.db.cursor()
@@ -121,8 +121,10 @@ class Database:
                 '{poliza.fechaInicio}', '{poliza.fechaFin}', '{poliza.porcentajeProductor}');
             INSERT INTO `Poliza_Auto` VALUES (LAST_INSERT_ID(), '{poliza.autoId}', '{poliza.grupoRiesgoId}',
                 '{poliza.franquicia}');
-        """, multi=True)
+        """)
         print(mycursor.statement)
+        
+        self.startDbConnection()
 
     def actualizacionPolizaAuto(self, poliza: PolizaAuto):
         mycursor = self.db.cursor()
