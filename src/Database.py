@@ -121,7 +121,7 @@ class Database:
                 '{poliza.fechaInicio}', '{poliza.fechaFin}', '{poliza.porcentajeProductor}');
             INSERT INTO `Poliza_Auto` VALUES (LAST_INSERT_ID(), '{poliza.autoId}', '{poliza.grupoRiesgoId}',
                 '{poliza.franquicia}');
-        """)
+        """, multi=True)
         print(mycursor.statement)
 
     def actualizacionPolizaAuto(self, poliza: PolizaAuto):
