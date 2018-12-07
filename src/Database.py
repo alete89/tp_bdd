@@ -58,8 +58,15 @@ class Database:
 
     def getPersonasList(self):
         mycursor = self.db.cursor(dictionary=True)
-        mycursor.execute(
-            "SELECT apellido, nombre, dni FROM Persona;")
+        mycursor.execute("""
+            SELECT dni, apellido, nombre, COUNT(*) siniestros FROM Persona
+            INNER JOIN Siniestro
+            ON Siniestro.Persona_dni = Persona.dni
+            GROUP BY dni, apellido, nombre
+            UNION
+            SELECT dni, apellido, nombre, 0 siniestros FROM Persona
+            WHERE NOT EXISTS (SELECT 1 FROM Siniestro sin WHERE sin.Persona_dni = Persona.dni);
+        """)
         return mycursor.fetchall()
 
     def getAutosList(self, idActual=None):
@@ -70,7 +77,9 @@ class Database:
             condicionIdActual = f"Auto.id = {idActual} OR"
         mycursor.execute(
             f"""
-                SELECT Auto.id, Modelo.nombre, Marca.nombre marca FROM Auto 
+                SELECT Auto.id, Modelo.nombre, Marca.nombre marca, factor FROM Auto
+                INNER JOIN Anio_Modelo 
+                ON Auto.Anio_Modelo_Modelo_id = Anio_Modelo.Modelo_id AND Auto.Anio_Modelo_anio = Anio_Modelo.anio
                 INNER JOIN Modelo 
                 ON Auto.Anio_Modelo_Modelo_id = Modelo.id
                 INNER JOIN Marca
@@ -87,7 +96,7 @@ class Database:
     def getGruposRiesgoList(self):
         mycursor = self.db.cursor(dictionary=True)
         mycursor.execute(
-            "SELECT id, descripcion FROM Grupo_Riesgo;")
+            "SELECT id, descripcion, valor FROM Grupo_Riesgo;")
         return mycursor.fetchall()
 
     def getEstadisticasComision(self, desde='2018-11-01', hasta='2018-12-01', tipoPoliza='todas'):

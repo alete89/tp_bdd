@@ -198,7 +198,7 @@ CREATE TABLE `Grupo_Riesgo` (
 
 LOCK TABLES `Grupo_Riesgo` WRITE;
 /*!40000 ALTER TABLE `Grupo_Riesgo` DISABLE KEYS */;
-INSERT INTO `Grupo_Riesgo` VALUES (1,'Terceros completo',100),(2,'Terceros completo + extras',150),(3,'Todo riesgo',300);
+INSERT INTO `Grupo_Riesgo` VALUES (1,'Terceros completo',1000),(2,'Terceros completo + extras',1500),(3,'Todo riesgo',3000);
 /*!40000 ALTER TABLE `Grupo_Riesgo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -721,6 +721,8 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2018-12-02  1:06:40
+
+INSERT INTO `Siniestro` VALUES ('1', 'Choque', '33333333');
 
 INSERT INTO `Profesion` VALUES ('1', 'Actor', '1.1');
 INSERT INTO `Profesion` VALUES ('2', 'Mecanico', '1.2');
