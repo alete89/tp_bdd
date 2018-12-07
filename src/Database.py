@@ -126,18 +126,18 @@ class Database:
             LEFT JOIN
                 (SELECT Productor_legajo, COUNT(*) activos, SUM(prima) comisionActivo
                 FROM Poliza
-                WHERE estado_id = 1 AND inicio < '{desde}' AND fin >= '{desde}' {condicionTipo}
+                WHERE estado_id != 3 AND inicio < '{desde}' AND fin >= '{desde}' {condicionTipo}
                 GROUP BY Productor_legajo) PolizaActiva
                 ON legajo = PolizaActiva.Productor_legajo
             LEFT JOIN
                 (SELECT Productor_legajo, COUNT(*) iniciados, SUM(prima) comisionInicio
                 FROM Poliza
-                WHERE estado_id = 1 AND inicio >= '{desde}' AND inicio <= '{hasta}' {condicionTipo}
+                WHERE estado_id != 3 AND inicio >= '{desde}' AND inicio <= '{hasta}' {condicionTipo}
                 GROUP BY Productor_legajo) PolizaInicia ON legajo = PolizaInicia.Productor_legajo
             LEFT JOIN
                 (SELECT Productor_legajo, COUNT(*) vencen, SUM(prima) comisionVence
                 FROM Poliza
-                WHERE estado_id = 1 AND fin >= '{desde}' AND fin <= '{hasta}' {condicionTipo}
+                WHERE estado_id != 3 AND fin >= '{desde}' AND fin <= '{hasta}' {condicionTipo}
                 GROUP BY Productor_legajo) PolizaVence ON legajo = PolizaVence.Productor_legajo
             ORDER BY balance ASC;
         """)
@@ -188,6 +188,7 @@ class Database:
     def actualizacionPolizasEstadoVencido(self):
         today = datetime.date.today().strftime("%Y-%m-%d")
         mycursor = self.db.cursor()
-        mycursor.execute(f"UPDATE `Poliza` SET Estado_id = 2 WHERE Estado_id != 2 AND fin < '{today}';")
+        mycursor.execute(
+            f"UPDATE `Poliza` SET Estado_id = 2 WHERE Estado_id != 2 AND fin < '{today}';")
         print(mycursor.statement)
         self.db.commit()
