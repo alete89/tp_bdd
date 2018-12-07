@@ -6,6 +6,8 @@ from utils import cargarTabla
 
 class Ui_MainWindow(object):
     pagina = 1
+    polizas = []
+    columnas = ['id', 'Auto_id', 'Grupo_Riesgo', 'franquicia', 'Estado', 'Productor', 'Persona', 'prima', 'inicio', 'fin']
 
     def setupUi(self, MainWindow):
         self.db = db.getInstance()
@@ -102,8 +104,6 @@ class Ui_MainWindow(object):
         self.anteriorButton.clicked.connect(self.anteriorPagina)
         self.siguienteButton.clicked.connect(self.siguientePagina)
 
-        self.actualizarPagina()
-
     def openNuevaPolizaDialog(self):
         dialog = PolizaDialog()
         result = dialog.exec_()
@@ -112,13 +112,18 @@ class Ui_MainWindow(object):
 
     def openEditarPolizaDialog(self):
         if (self.tablaPolizas.selectedItems()):
-            dialog = PolizaDialog(False, self.tablaPolizas.selectedItems())
+            dialog = PolizaDialog(False, self.obtenerPolizaSeleccionada())
             result = dialog.exec_()
             if (result):
                 self.actualizarPagina()
 
         else:
             print("no se seleccionó ninguna fila para editar")
+    
+    def obtenerPolizaSeleccionada(self):
+        for poliza in self.polizas:
+            if str(poliza['id']) == self.tablaPolizas.selectedItems()[0].text():
+                return poliza
 
     def anteriorPagina(self):
         if self.pagina > 1:
@@ -132,7 +137,8 @@ class Ui_MainWindow(object):
     def actualizarPagina(self):
         _translate = QtCore.QCoreApplication.translate
         self.paginaLabel.setText(_translate("MainWindow", f"Pagina: {self.pagina}"))
-        cargarTabla(self.tablaPolizas, *self.db.getPolizasAutoList(self.pagina))
+        self.polizas, columnNames = self.db.getPolizasAutoList(self.pagina)
+        cargarTabla(self.tablaPolizas, self.polizas, self.columnas)
 
 
 if __name__ == "__main__":
@@ -142,4 +148,5 @@ if __name__ == "__main__":
     ui = Ui_MainWindow()
     ui.setupUi(mw)
     mw.show()
+    ui.actualizarPagina()
     sys.exit(app.exec_())

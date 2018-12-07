@@ -22,22 +22,23 @@ class PolizaDialog(QtWidgets.QDialog):
         self.productorComboBox = QtWidgets.QComboBox(self)
         for productor in self.db.getProductoresList():
             self.productorComboBox.addItem(
-                str(productor[1] + " " + productor[0]), userData=productor[2])
+                f"{productor['apellido']} {productor['nombre']}", userData=productor['legajo'])
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.productorComboBox)
         self.conductorLabel = QtWidgets.QLabel(self)
         self.conductorLabel.setText("Conductor")
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.conductorLabel)
         self.conductorComboBox = QtWidgets.QComboBox(self)
         for persona in self.db.getPersonasList():
-            self.conductorComboBox.addItem(str(persona[1] + " " + persona[0]), userData=persona[2])
+            self.conductorComboBox.addItem(
+                f"{persona['apellido']} {persona['nombre']}", userData=persona['dni'])
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.conductorComboBox)
         self.autoLabel = QtWidgets.QLabel(self)
         self.autoLabel.setText("Auto")
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.autoLabel)
         self.autoComboBox = QtWidgets.QComboBox(self)
-        for auto in self.db.getAutosList(None if esNueva else rowData[1].text()):
+        for auto in self.db.getAutosList(None if esNueva else rowData['Auto_id']):
             self.autoComboBox.addItem(
-                "id/patente: " + str(auto[0]) + " - Modelo: " + auto[1], userData=auto[0])
+                f"id/patente: {auto['id']} - Modelo: {auto['marca']} {auto['nombre']}", userData=auto['id'])
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.autoComboBox)
         self.addAuto = QtWidgets.QPushButton()
         self.addAuto.setText("Agregar Auto")
@@ -47,7 +48,8 @@ class PolizaDialog(QtWidgets.QDialog):
         self.formLayout.setWidget(4, QtWidgets.QFormLayout.LabelRole, self.grupoDeRiesgoLabel)
         self.GrupoDeRiesgoCombo = QtWidgets.QComboBox(self)
         for grupoRiesgo in self.db.getGruposRiesgoList():
-            self.GrupoDeRiesgoCombo.addItem(str(grupoRiesgo[1]), userData=grupoRiesgo[0])
+            self.GrupoDeRiesgoCombo.addItem(
+                f"{grupoRiesgo['descripcion']}", userData=grupoRiesgo['id'])
         self.formLayout.setWidget(4, QtWidgets.QFormLayout.FieldRole, self.GrupoDeRiesgoCombo)
         self.franquiciaLabel = QtWidgets.QLabel(self)
         self.franquiciaLabel.setText("Franquicia")
@@ -90,17 +92,17 @@ class PolizaDialog(QtWidgets.QDialog):
         self.GrupoDeRiesgoCombo.setCurrentIndex(-1)
         self.conductorComboBox.setCurrentIndex(-1)
 
-    def dialogEditarPoliza(self, rowData):
-        productorIndex = self.productorComboBox.findData(rowData[6].text())
+    def dialogEditarPoliza(self, poliza):
+        productorIndex = self.productorComboBox.findData(poliza['Productor_legajo'])
         self.productorComboBox.setCurrentIndex(productorIndex)
-        personaIndex = self.conductorComboBox.findData(rowData[7].text())
+        personaIndex = self.conductorComboBox.findData(poliza['Persona_dni'])
         self.conductorComboBox.setCurrentIndex(personaIndex)
-        autoIndex = self.autoComboBox.findData(rowData[1].text())
+        autoIndex = self.autoComboBox.findData(poliza['Auto_id'])
         self.autoComboBox.setCurrentIndex(autoIndex)
-        grupoRiesgoIndex = self.GrupoDeRiesgoCombo.findData(rowData[2].text())
+        grupoRiesgoIndex = self.GrupoDeRiesgoCombo.findData(poliza['Grupo_Riesgo_id'])
         self.GrupoDeRiesgoCombo.setCurrentIndex(grupoRiesgoIndex)
-        self.franquiciaLineEdit.setText(rowData[3].text())
-        fechaPoliza = QtCore.QDate.fromString(rowData[9].text(), "yyyy-MM-dd")
+        self.franquiciaLineEdit.setText(str(poliza['franquicia']))
+        fechaPoliza = poliza['inicio']
         self.validoDesdeDateEdit.setDate(fechaPoliza)
 
     def handleOK(self):
@@ -118,13 +120,13 @@ class PolizaDialog(QtWidgets.QDialog):
             poliza.calcularFechaFin()
 
             # reemplazar por constructor
-            print(poliza)
+            
             if (self.esNueva):
                 poliza.estado = 1
                 self.db.insercionPolizaAuto(poliza)
             else:
-                poliza.id = self.rowData[0].text()
-                poliza.estado = self.rowData[5].text()
+                poliza.id = self.rowData['id']
+                poliza.estado = self.rowData['Estado_id']
                 self.db.actualizacionPolizaAuto(poliza)
             self.accept()
         except Exception as e:
