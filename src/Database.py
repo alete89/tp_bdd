@@ -2,6 +2,7 @@ import mysql.connector
 import PolizaAuto
 import datetime
 
+
 class Database:
     __instance = None
 
@@ -23,7 +24,7 @@ class Database:
         self.db = mysql.connector.connect(
             host="localhost",
             user="root",
-            passwd="password",
+            passwd="bwxor",
             database="tpSeguros"
         )
 
@@ -189,6 +190,6 @@ class Database:
         today = datetime.date.today().strftime("%Y-%m-%d")
         mycursor = self.db.cursor()
         mycursor.execute(
-            f"UPDATE `Poliza` SET Estado_id = 2 WHERE Estado_id != 2 AND fin < '{today}';")
+            f"UPDATE `Poliza` SET Estado_id = 2 WHERE Estado_id = 1 AND fin < '{today}';")
         print(mycursor.statement)
         self.db.commit()

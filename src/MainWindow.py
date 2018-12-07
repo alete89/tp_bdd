@@ -121,6 +121,8 @@ class Ui_MainWindow(object):
 
     def abrirReporte(self):
         dialog = ReporteDialog()
+        dialog.show()
+        dialog.actualizarBusqueda()
         dialog.exec_()
 
     def openNuevaPolizaDialog(self):
