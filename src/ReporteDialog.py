@@ -7,7 +7,7 @@ class ReporteDialog(QtWidgets.QDialog):
     def __init__(self):
         super(QtWidgets.QDialog, self).__init__()
         self.db = Database.getInstance()
-        self.resize(1350, 650)
+        self.resize(800, 600)
         self.verticalLayout = QtWidgets.QVBoxLayout(self)
         self.contenedorSuperior = QtWidgets.QHBoxLayout(self)
 
