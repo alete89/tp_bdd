@@ -1,6 +1,6 @@
 import mysql.connector
 import PolizaAuto
-
+import datetime
 
 class Database:
     __instance = None
@@ -147,7 +147,6 @@ class Database:
     def insercionPolizaAuto(self, poliza: PolizaAuto):
         print(poliza)
         mycursor = self.db.cursor()
-
         mycursor.execute(f"""
             INSERT INTO `Poliza` VALUES (NULL, '1', '{poliza.productorLegajo}', '{poliza.clienteDni}', '{poliza.prima}',
                 '{poliza.fechaInicio}', '{poliza.fechaFin}', '{poliza.porcentajeProductor}');""")
@@ -165,9 +164,6 @@ class Database:
     def actualizacionPolizaAuto(self, poliza: PolizaAuto):
         print(poliza)
         mycursor = self.db.cursor()
-
-
-
         mycursor.execute(f"""
             UPDATE `Poliza` SET Estado_id = '{poliza.estado}', Productor_legajo = '{poliza.productorLegajo}',
                 Persona_dni = '{poliza.clienteDni}', prima = '{poliza.prima}', inicio = '{poliza.fechaInicio}',
@@ -180,5 +176,18 @@ class Database:
                 franquicia = '{poliza.franquicia}'
             WHERE Poliza_id = {poliza.id};
         """)
+        print(mycursor.statement)
+        self.db.commit()
+
+    def actualizacionPolizaAutoEstado(self, polizaId, estadoId):
+        mycursor = self.db.cursor()
+        mycursor.execute(f"UPDATE `Poliza` SET Estado_id = '{estadoId}' WHERE id = {polizaId};")
+        print(mycursor.statement)
+        self.db.commit()
+
+    def actualizacionPolizasEstadoVencido(self):
+        today = datetime.date.today().strftime("%Y-%m-%d")
+        mycursor = self.db.cursor()
+        mycursor.execute(f"UPDATE `Poliza` SET Estado_id = 2 WHERE Estado_id != 2 AND fin < '{today}';")
         print(mycursor.statement)
         self.db.commit()

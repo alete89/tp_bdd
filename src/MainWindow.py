@@ -40,6 +40,9 @@ class Ui_MainWindow(object):
         self.cambiarEstadoButton = QtWidgets.QPushButton(self.centralwidget)
         self.cambiarEstadoButton.setObjectName("cambiarEstadoButton")
         self.columnaDerecha.addWidget(self.cambiarEstadoButton)
+        self.actualizarEstadoButton = QtWidgets.QPushButton(self.centralwidget)
+        self.actualizarEstadoButton.setObjectName("actualizarEstadoButton")
+        self.columnaDerecha.addWidget(self.actualizarEstadoButton)
         self.horizontalLayout.addLayout(self.columnaDerecha)
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -84,7 +87,9 @@ class Ui_MainWindow(object):
         self.nuevaButton.setText(_translate("MainWindow", "Nueva"))
         self.editarButton.setText(_translate("MainWindow", "Editar"))
         self.cambiarEstadoButton.setText(
-            _translate("MainWindow", "Cambiar Estado"))
+            _translate("MainWindow", "Cancelar / Reactivar"))
+        self.actualizarEstadoButton.setText(
+            _translate("MainWindow", "Actualizar Estado Vencido"))
         self.menuArchivo.setTitle(_translate("MainWindow", "Archivo"))
         self.menuAyuda.setTitle(_translate("MainWindow", "Ayuda"))
         self.actionSalir.setText(_translate("MainWindow", "Salir"))
@@ -103,6 +108,8 @@ class Ui_MainWindow(object):
         self.editarButton.clicked.connect(self.openEditarPolizaDialog)
         self.anteriorButton.clicked.connect(self.anteriorPagina)
         self.siguienteButton.clicked.connect(self.siguientePagina)
+        self.cambiarEstadoButton.clicked.connect(self.cambiarEstado)
+        self.actualizarEstadoButton.clicked.connect(self.actualizarEstado)
 
     def openNuevaPolizaDialog(self):
         dialog = PolizaDialog()
@@ -119,7 +126,21 @@ class Ui_MainWindow(object):
 
         else:
             print("no se seleccionó ninguna fila para editar")
-    
+
+    def cambiarEstado(self):
+        if (self.tablaPolizas.selectedItems()):
+            poliza = self.obtenerPolizaSeleccionada()
+            if poliza['Estado_id'] != 2:
+                nuevoEstado = 3 if poliza['Estado_id'] == 1 else 1
+                self.db.actualizacionPolizaAutoEstado(poliza['id'], nuevoEstado)
+                self.actualizarPagina()
+        else:
+            print("no se seleccionó ninguna fila para cambiar el estado")
+
+    def actualizarEstado(self):
+        self.db.actualizacionPolizasEstadoVencido()
+        self.actualizarPagina()
+
     def obtenerPolizaSeleccionada(self):
         for poliza in self.polizas:
             if str(poliza['id']) == self.tablaPolizas.selectedItems()[0].text():
