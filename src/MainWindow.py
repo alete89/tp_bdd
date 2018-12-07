@@ -1,13 +1,15 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Database import Database as db
 from PolizaDialog import PolizaDialog
+from ReporteDialog import ReporteDialog
 from utils import cargarTabla
 
 
 class Ui_MainWindow(object):
     pagina = 1
     polizas = []
-    columnas = ['id', 'Auto_id', 'Grupo_Riesgo', 'franquicia', 'Estado', 'Productor', 'Persona', 'prima', 'inicio', 'fin']
+    columnas = ['id', 'Auto_id', 'Grupo_Riesgo', 'franquicia',
+                'Estado', 'Productor', 'Persona', 'prima', 'inicio', 'fin']
 
     def setupUi(self, MainWindow):
         self.db = db.getInstance()
@@ -43,6 +45,10 @@ class Ui_MainWindow(object):
         self.actualizarEstadoButton = QtWidgets.QPushButton(self.centralwidget)
         self.actualizarEstadoButton.setObjectName("actualizarEstadoButton")
         self.columnaDerecha.addWidget(self.actualizarEstadoButton)
+        self.reporteButton = QtWidgets.QPushButton(self.centralwidget)
+        self.reporteButton.setObjectName("reporteButton")
+        self.columnaDerecha.addWidget(self.reporteButton)
+
         self.horizontalLayout.addLayout(self.columnaDerecha)
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -102,6 +108,7 @@ class Ui_MainWindow(object):
 
         self.anteriorButton.setText(_translate("MainWindow", "Anterior"))
         self.siguienteButton.setText(_translate("MainWindow", "Siguiente"))
+        self.reporteButton.setText(_translate("MainWindow", "Mostrar Reporte"))
 
         # conexión
         self.nuevaButton.clicked.connect(self.openNuevaPolizaDialog)
@@ -110,6 +117,11 @@ class Ui_MainWindow(object):
         self.siguienteButton.clicked.connect(self.siguientePagina)
         self.cambiarEstadoButton.clicked.connect(self.cambiarEstado)
         self.actualizarEstadoButton.clicked.connect(self.actualizarEstado)
+        self.reporteButton.clicked.connect(self.abrirReporte)
+
+    def abrirReporte(self):
+        dialog = ReporteDialog()
+        dialog.exec_()
 
     def openNuevaPolizaDialog(self):
         dialog = PolizaDialog()
