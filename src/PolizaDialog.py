@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Database import Database
 from PolizaAuto import PolizaAuto
+import traceback
 
 
 class PolizaDialog(QtWidgets.QDialog):
@@ -34,14 +35,9 @@ class PolizaDialog(QtWidgets.QDialog):
         self.autoLabel.setText("Auto")
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.autoLabel)
         self.autoComboBox = QtWidgets.QComboBox(self)
-        if (esNueva):
-            for auto in self.db.getAutosList():
-                self.autoComboBox.addItem(
-                    "id/patente: " + str(auto[0]) + " - Modelo: " + auto[1], userData=auto[0])
-        else:
-            for auto in self.db.getAutosList(rowData[1].text()):
-                self.autoComboBox.addItem(
-                    "id/patente: " + str(auto[0]) + " - Modelo: " + auto[1], userData=auto[0])
+        for auto in self.db.getAutosList(None if esNueva else rowData[1].text()):
+            self.autoComboBox.addItem(
+                "id/patente: " + str(auto[0]) + " - Modelo: " + auto[1], userData=auto[0])
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.autoComboBox)
         self.addAuto = QtWidgets.QPushButton()
         self.addAuto.setText("Agregar Auto")
@@ -72,6 +68,9 @@ class PolizaDialog(QtWidgets.QDialog):
         self.buttonBox.setStandardButtons(
             QtWidgets.QDialogButtonBox.Cancel | QtWidgets.QDialogButtonBox.Ok)
         self.verticalLayout.addWidget(self.buttonBox)
+
+        self.error = QtWidgets.QLabel(self)
+        self.verticalLayout.addWidget(self.error)
 
         self.buttonBox.accepted.connect(self.handleOK)
         self.buttonBox.rejected.connect(self.reject)
@@ -107,27 +106,30 @@ class PolizaDialog(QtWidgets.QDialog):
     def handleOK(self):
         poliza = PolizaAuto()
         # reemplazar por constructor
+        try:
+            poliza.productorLegajo = self.productorComboBox.currentData()
+            poliza.clienteDni = self.conductorComboBox.currentData()
+            poliza.franquicia = float(self.franquiciaLineEdit.text())
+            poliza.autoId = self.autoComboBox.currentData()
+            poliza.grupoRiesgoId = self.GrupoDeRiesgoCombo.currentData()
+            poliza.fechaInicio = self.validoDesdeDateEdit.date().toString("yyyy-MM-dd")
+            poliza.porcentajeProductor = 10
+            poliza.calcularPrima()
+            poliza.calcularFechaFin()
 
-        poliza.productorLegajo = self.productorComboBox.currentData()
-        poliza.clienteDni = self.conductorComboBox.currentData()
-        poliza.franquicia = float(self.franquiciaLineEdit.text())
-        poliza.autoId = self.autoComboBox.currentData()
-        poliza.grupoRiesgoId = self.GrupoDeRiesgoCombo.currentData()
-        poliza.fechaInicio = self.validoDesdeDateEdit.date().toString("yyyy-MM-dd")
-        poliza.porcentajeProductor = 10
-        poliza.calcularPrima()
-        poliza.calcularFechaFin()
-
-        # reemplazar por constructor
-        print(poliza)
-        if (self.esNueva):
-            poliza.estado = 1
-            self.db.insercionPolizaAuto(poliza)
-        else:
-            poliza.id = self.rowData[0].text()
-            poliza.estado = self.rowData[5].text()
-            self.db.actualizacionPolizaAuto(poliza)
-        self.accept()
+            # reemplazar por constructor
+            print(poliza)
+            if (self.esNueva):
+                poliza.estado = 1
+                self.db.insercionPolizaAuto(poliza)
+            else:
+                poliza.id = self.rowData[0].text()
+                poliza.estado = self.rowData[5].text()
+                self.db.actualizacionPolizaAuto(poliza)
+            self.accept()
+        except Exception as e:
+            print(e)
+            self.error.setText(e.__str__())
 
 
 if __name__ == "__main__":
